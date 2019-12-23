@@ -1,13 +1,10 @@
 package com.LinWengLiang.Service;
 
-
-
-
 /**
  * @author linwengliang
- * @Title: HadoopMapper
+ * @Title: aaa
  * @Description: TODO
- * @date 2019/12/2311:32 AM
+ * @date 2019/12/2310:38 PM
  */
-public class HadoopMapper {
+public class aaa {
 }
