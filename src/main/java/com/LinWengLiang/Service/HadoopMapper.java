@@ -1,6 +1,7 @@
 package com.LinWengLiang.Service;
 
 
+import com.LinWengLiang.Model.StaffBean;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -23,17 +24,16 @@ import java.io.IOException;
  * hadoop为jdk中的常用基本类型Long String Integer Float等数据类型封住了自己的实现了hadoop序列化接口的类型：LongWritable,Text,IntWritable,FloatWritable
  * @date 2019/12/2311:32 AM
  */
-public class HadoopMapper extends Mapper<Text,LongWritable,Text,IntWritable>{
+public class HadoopMapper extends Mapper<LongWritable,Text,Text, StaffBean>{
     @Override
-    protected void map(Text key, LongWritable value, Context context) throws IOException, InterruptedException {
-
-        //一行一行的读
-        //切单词
+    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString();
-        String[] worlds = line.split(" ");
-        for(String world :worlds){
-            context.write(new Text(world),new IntWritable(1));
-        }
-        super.map(key, value, context);
+         String[] fields  = line.split("\t");
+         String companyName = fields[4];
+         String produceNane = fields[5];
+         String supplierName = fields[6];
+         int count = Integer.parseInt(fields[8].equals("")?"0":fields[8]);
+
+         context.write(new Text(produceNane+supplierName+companyName),new StaffBean(companyName,supplierName,produceNane,count));
     }
 }
