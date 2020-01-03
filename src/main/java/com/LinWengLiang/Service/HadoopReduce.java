@@ -24,13 +24,13 @@ public class HadoopReduce extends Reducer<Text, StaffBean,Text,StaffBean>{
         String produceNane =null;
         String supplierName =null;
 
-        for (StaffBean staffBean :values){
-            count += staffBean.getCount();
-             companyName = staffBean.getCompanyName();
-             produceNane = staffBean.getProduceNanme();
-             supplierName = staffBean.getSupplierName();
-        }
-
-        context.write(new Text(String.valueOf(count)),new StaffBean(companyName,supplierName,produceNane,count));
+//        for (StaffBean staffBean :values){
+//            count += staffBean.getCount();
+//             companyName = staffBean.getCompanyName();
+//             produceNane = staffBean.getProduceNanme();
+//             supplierName = staffBean.getSupplierName();
+//        }
+//
+//        context.write(new Text(String.valueOf(count)),new StaffBean(companyName,supplierName,produceNane,count));
     }
 }

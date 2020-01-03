@@ -1,3 +1,4 @@
+import com.LinWengLiang.Model.CityAndCountiem;
 import com.LinWengLiang.Model.StaffBean;
 import com.LinWengLiang.Service.ReadTxtService;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
@@ -130,7 +131,7 @@ public class excelTest {
     private HSSFCell setCell(List<StaffBean> staffBeans,HSSFSheet sheet){
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = row.createCell((short) 0);
-        String outData[] = {"地区"};
+        String outData[] = {"序号"};
         for (int i = 0; i < staffBeans.size(); i++){
             row = sheet.createRow(i + 4);
             for (int j = 0;j<outData.length;j++){
@@ -146,7 +147,7 @@ public class excelTest {
 //                    cell.setCellValue(staffBean.getCompanyName());
 //                }
                 if (outData[j].equals("地区")){
-                    cell.setCellValue(staffBean.getCompanyName());
+//                    cell.setCellValue(staffBean.getCompanyName());
                 }
             }
         }
@@ -336,13 +337,18 @@ public class excelTest {
         //网友推荐更加简洁的写法
         while ((line = br.readLine()) != null) {
             // 一次读入一行数据
-            String str  = line.substring(2);
-            String[] strs = str.split(",");
+            String[] strs = line.split(",");
+            String[]citys = strs[2].substring(1).split("\t");
             StaffBean staffBean = new StaffBean();
             staffBean.setProduceNanme(strs[0]);
             staffBean.setSupplierName(strs[1]);
-            staffBean.setCompanyName(strs[2]);
-            staffBean.setCount(Integer.parseInt(strs[3]));
+            ArrayList<CityAndCountiem> countiems = new ArrayList<CityAndCountiem>();
+            for (String str :citys){
+                CityAndCountiem cityAndCountiem = new CityAndCountiem();
+                cityAndCountiem.set(str.substring(0,2),str.substring(2));
+                countiems.add(cityAndCountiem);
+            }
+            staffBean.setItems(countiems);
             beanArrayList.add(staffBean);
         }
 //        List<StaffBean> staffBeans = readTxtService.readText(pathname);

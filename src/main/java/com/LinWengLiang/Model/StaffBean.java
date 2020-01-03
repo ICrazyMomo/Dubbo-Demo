@@ -5,6 +5,7 @@ import org.apache.hadoop.io.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Qutto，
@@ -14,30 +15,21 @@ import java.io.IOException;
  */
 public class StaffBean implements Writable {
 
-    //公司名称
-    private String companyName;
     //产品名称
     private String produceNanme;
     //供应商名称
     private String supplierName;
-    //产品数量
-    private int count;
+
+    private List<CityAndCountiem> items;
 
     public StaffBean(){}
 
-    public StaffBean(String companyName, String supplierName, String produceNanme,int count){
-        this.companyName = companyName;
-        this.supplierName =supplierName;
-        this.produceNanme = produceNanme;
-        this.count =count;
+    public List<CityAndCountiem> getItems() {
+        return items;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setItems(List<CityAndCountiem> items) {
+        this.items = items;
     }
 
     public String getProduceNanme() {
@@ -56,32 +48,21 @@ public class StaffBean implements Writable {
         this.supplierName = supplierName;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeUTF(this.companyName);
         out.writeUTF(this.supplierName);
         out.writeUTF(this.produceNanme);
-        out.writeInt(this.count);
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        this.companyName = in.readUTF();
         this.supplierName = in.readUTF();
         this.produceNanme = in.readUTF();
-        this.count = in.readInt();
     }
 
-    @Override
-    public String toString() {
-        return this.produceNanme + ","+ this.supplierName + "," + this.companyName+","+ this.count;
-    }
+//    @Override
+//    public String toString() {
+//        return this.produceNanme + ","+ this.supplierName + "," + this.companyName+","+ this.count;
+//    }
 }

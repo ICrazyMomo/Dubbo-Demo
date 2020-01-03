@@ -1,34 +1,22 @@
-package com.LinWengLiang.Service;
-
 import com.LinWengLiang.Model.StaffBean;
+import com.LinWengLiang.Service.HadoopMapper;
+import com.LinWengLiang.Service.HadoopReduce;
+import com.LinWengLiang.Service.JobSubmitter;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
-import java.net.URI;
 
 /**
  * @author linwengliang
- * @Title: JobSubmitter
- * @Description: MapReduce任务主函数
- * @date 2019/12/242:09 PM
+ * @Title: mapReduceTest
+ * @Description: TODO
+ * @date 2020/1/31:47 PM
  */
-
-public class JobSubmitter implements CommandLineRunner  {
-
-    public static final Logger log = LoggerFactory.getLogger(JobSubmitter.class);
-
-    @Override
-    public void run(String... args) throws Exception {
+public class mapReduceTest {
+    public static void main(String[] args) throws Exception{
         Job job = Job.getInstance(new Configuration());
         job.setJarByClass(JobSubmitter.class);
         // 2、封装参数： 本次job所要调用的Mapper实现类、Reducer实现类

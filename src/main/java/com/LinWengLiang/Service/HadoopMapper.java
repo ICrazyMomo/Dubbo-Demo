@@ -34,6 +34,6 @@ public class HadoopMapper extends Mapper<LongWritable,Text,Text, StaffBean>{
          String supplierName = fields[6];
          int count = Integer.parseInt(fields[8].equals("")?"0":fields[8]);
 
-         context.write(new Text(produceNane+supplierName+companyName),new StaffBean(companyName,supplierName,produceNane,count));
+//         context.write(new Text(produceNane+supplierName+companyName),new StaffBean(companyName,supplierName,count));
     }
 }
