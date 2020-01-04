@@ -1,5 +1,6 @@
 package com.LinWengLiang.Service;
 
+import com.LinWengLiang.Model.DataItem;
 import com.LinWengLiang.Model.StaffBean;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -14,23 +15,15 @@ import java.util.Iterator;
  * @Description: reduce实现类
  * @date 2019/12/242:01 PM
  */
-public class HadoopReduce extends Reducer<Text, StaffBean,Text,StaffBean>{
+public class HadoopReduce extends Reducer<Text, Text,Text,Text>{
 
     @Override
-    protected void reduce(Text key, Iterable<StaffBean> values, Context context) throws IOException, InterruptedException {
+    protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
         int count = 0;
-        String companyName = null;
-        String produceNane =null;
-        String supplierName =null;
-
-//        for (StaffBean staffBean :values){
-//            count += staffBean.getCount();
-//             companyName = staffBean.getCompanyName();
-//             produceNane = staffBean.getProduceNanme();
-//             supplierName = staffBean.getSupplierName();
-//        }
-//
-//        context.write(new Text(String.valueOf(count)),new StaffBean(companyName,supplierName,produceNane,count));
+        for (Text a :values){
+            count += Integer.parseInt(a.toString());
+        }
+        context.write(key,new Text(String.valueOf(count)));
     }
 }

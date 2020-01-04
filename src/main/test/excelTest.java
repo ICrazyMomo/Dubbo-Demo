@@ -1,11 +1,10 @@
 import com.LinWengLiang.Model.CityAndCountiem;
 import com.LinWengLiang.Model.StaffBean;
 import com.LinWengLiang.Service.ReadTxtService;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,51 +46,39 @@ public class excelTest {
 
         HSSFRow row1 = sheet.createRow(1);
         HSSFCell cell = row1.createCell((short) 0);
-        cell.setCellValue("序号");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,0,0));
 
-        cell = row1.createCell((short) 1);
-        cell.setCellValue("抽检产品");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,1,1));
+        this.setExcellStyle(workbook,sheet,row1,0,"序号",500);
 
-        cell = row1.createCell((short) 2);
-        cell.setCellValue("每个品类每个供应商样品抽样送检批次（次）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,2,2));
+        this.setExcellStyle(workbook,sheet,row1,1,"抽检产品",3000);
 
-        cell = row1.createCell((short) 3);
-        cell.setCellValue("每个品类每个供应商每批次抽检样品组数（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,3,3));
+        this.setExcellStyle(workbook,sheet,row1,2,"每个品类每个供应商样品抽样送检批次（次）",2000);
 
-        cell = row1.createCell((short) 4);
-        cell.setCellValue("供应商（标红供应商表示已达到该供应商集团计划抽检数量的1.5倍）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,4,4));
+        this.setExcellStyle(workbook,sheet,row1,3,"每个品类每个供应商每批次抽检样品组数（组）",2000);
 
-        cell = row1.createCell((short) 5);
-        cell.setCellValue("订单系统已下单应送样数量（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,5,5));
+        this.setExcellStyle(workbook,sheet,row1,4,"供应商（标红供应商表示已达到该供应商集团计划抽检数量的1.5倍）",2000);
 
-        cell = row1.createCell((short) 6);
-        cell.setCellValue("已送样数量（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,6,6));
+        this.setExcellStyle(workbook,sheet,row1,5,"订单系统已下单应送样数量（组）",2000);
 
-        cell = row1.createCell((short) 7);
-        cell.setCellValue("已抽样数量（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,7,7));
+        this.setExcellStyle(workbook,sheet,row1,6,"已送样数量（组）",2000);
 
-        cell = row1.createCell((short) 8);
-        cell.setCellValue("剩余未抽样数（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3,8,8));
+        this.setExcellStyle(workbook,sheet,row1,7,"已抽样数量（组）",2000);
 
-        cell = row1.createCell((short) 9);
-        cell.setCellValue("按计划数1.5倍剩余未抽样数（组）");
-        sheet.addMergedRegion(new CellRangeAddress(1,3, 9, 9));
+        this.setExcellStyle(workbook,sheet,row1,8,"剩余未抽样数（组）",2000);
+
+        this.setExcellStyle(workbook,sheet,row1,9,"按计划数1.5倍剩余未抽样数（组）",2000);
 
         cell = row1.createCell((short) 10);
         cell.setCellValue("地区（“√”表示订单系统有采购订单的供应商）");
+        CellStyle cellStyle = workbook.createCellStyle(); // 创建单元格样式
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);  // 设置单元格水平方向对其方式
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置单元格垂直方向对其方式
+        cell.setCellStyle(cellStyle); // 设置单元格样式
         sheet.addMergedRegion(new CellRangeAddress(1,1, 10, 27));
 
         cell = row1.createCell((short) 28);
         cell.setCellValue("备注");
+
+
         String[] headCity = new String[] { "","","","","","","","","","","福州", "福州", "厦门", "厦门", "宁德", "宁德",
                 "莆田", "莆田" ,"泉州","泉州","漳州","漳州","龙岩","龙岩","三明","三明","南平","南平"};
         // 创建第二行
@@ -100,6 +87,11 @@ public class excelTest {
         for (int i = 10; i < 28; i++) {
             cell = row2.createCell(i);
             cell.setCellValue(headCity[i]);
+            CellStyle cityCellStyle = workbook.createCellStyle(); // 创建单元格样式
+            cityCellStyle.setAlignment(HorizontalAlignment.CENTER);  // 设置单元格水平方向对其方式
+            cityCellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置单元格垂直方向对其方式
+            cell.setCellStyle(cityCellStyle); // 设置单元格样式
+            sheet.setColumnWidth( i, 1200);
         }
         //对应excel中的行和列，下表从0开始{"开始行,结束行,开始列,结束列"}
         String[] headCityNum = new String[] { "2,2,10,11", "2,2,12,13","2,2,14,15","2,2,16,17","2,2,18,19","2,2,20,21","2,2,22,23","2,2,24,25","2,2,26,27","2,2,28,29","2,2,30,31","2,2,32,33"};
@@ -115,100 +107,203 @@ public class excelTest {
         }
         String[] headOrder = new String[] { "","","","","","","","","","","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况","订单情况", "抽样情况" };
         HSSFRow row3 = sheet.createRow(3);
-        for (int i = 0; i < 28; i++) {
+        for (int i = 10; i < 28; i++) {
             cell = row3.createCell(i);
             cell.setCellValue(headOrder[i]);
+            CellStyle cs = workbook.createCellStyle(); // 创建单元格样式
+            cs.setAlignment(HorizontalAlignment.CENTER);  // 设置单元格水平方向对其方式
+            cs.setVerticalAlignment(VerticalAlignment.CENTER); // 设置单元格垂直方向对其方式
+            cs.setWrapText(true);
+            cell.setCellStyle(cs); // 设置单元格样式
+            sheet.setColumnWidth( i,900);
+//            sheet.setDefaultRowHeight((short)10000);//设置行高
         }
         workbook.setSheetName(0,"集团到货抽检订单情况表（仅包含1-12月有采购订单的供应商）");
 //        this.setExcellStyle(workbook,sheet);
-       this.setCell(staffBeans,sheet);
+        this.setCell(staffBeans,sheet,workbook);
         //文档输出
-        FileOutputStream out = new FileOutputStream("D:\\code\\exportExcel/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()).toString() + ".xls");
+        FileOutputStream out = new FileOutputStream("D:\\code\\exportExcel/" + "分公司抽检情况-"+new SimpleDateFormat("MM").format(new Date()).toString() + ".xls");
         workbook.write(out);
         out.close();
     }
 
-    private HSSFCell setCell(List<StaffBean> staffBeans,HSSFSheet sheet){
+    //设置单元格
+    private HSSFCell setCell(List<StaffBean> staffBeans,HSSFSheet sheet,HSSFWorkbook wb){
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = row.createCell((short) 0);
-        String outData[] = {"序号"};
+        String outData[] = {"序号","抽检产品","每个品类每个供应商样品抽样送检批次（次）","每个品类每个供应商每批次抽检样品组数（组）","供应商（标红供应商表示已达到该供应商集团计划抽检数量的1.5倍）","订单系统已下单应送样数量（组）","已送样数量（组）","已抽样数量（组）","剩余未抽样数（组）","按计划数1.5倍剩余未抽样数（组）","福州订单情况","福州抽样情况","厦门订单情况","厦门抽样情况","宁德订单情况","宁德抽样情况","莆田订单情况","莆田抽样情况","泉州订单情况","泉州抽样情况","漳州订单情况","漳州抽样情况","龙岩订单情况","龙岩抽样情况","三明订单情况","三明抽样情况","南平订单情况","南平抽样情况","备注"};
+        //上一个产品名称
+        String tmpProduceName = "";
+        //上一次合并的结束行
+        int startIndex = 4;
+        int endIndex = 4;
+        int num =1;
         for (int i = 0; i < staffBeans.size(); i++){
+            StaffBean staffBean = staffBeans.get(i);
             row = sheet.createRow(i + 4);
-            for (int j = 0;j<outData.length;j++){
-                StaffBean staffBean = staffBeans.get(i);
-                cell = row.createCell(j);
-//                if (outData[j].equals("序号")){
-//                    cell.setCellValue(i+1);
-//                }else if (outData[j].equals("供应商")){
-//                    cell.setCellValue(staffBean.getSupplierName());
-//                }else if (outData[j].equals("按计划数1.5倍剩余未抽样数")){
-//                    cell.setCellValue(staffBean.getCount());
-//                }else if (outData[j].equals("地区")){
-//                    cell.setCellValue(staffBean.getCompanyName());
-//                }
-                if (outData[j].equals("地区")){
-//                    cell.setCellValue(staffBean.getCompanyName());
+            if (i==0){//第一条数据，就是第5行开始
+                tmpProduceName = staffBean.getProduceNanme();
+            }else if (i>0){//第二条数据开始之后
+                if (!tmpProduceName.equals(staffBean.getProduceNanme())){//判断新的一行的产品名称跟上一行是否相等(存在有不相同的行)
+                    tmpProduceName = staffBean.getProduceNanme();
+                    num += 1;
+                    if (startIndex!=endIndex){
+                        this.mergerCell(sheet,startIndex,endIndex);
+                    }
+                    startIndex=endIndex+1;
+                }else{//如果全是相同的行(判断最后一行和第一行是否相同，如果相同就全部合并)
+                    if (i==staffBeans.size()-1){
+                        if (tmpProduceName.equals(staffBean.getProduceNanme())){
+                            this.mergerCell(sheet,startIndex,i+startIndex);
+                        }
+                    }
                 }
+                endIndex = endIndex+1;
+            }
+            for (int j = 0;j<outData.length;j++){
+                cell = row.createCell(j);
+                if (outData[j].equals("序号")){
+                    cell.setCellValue(num);
+                    this.setDataCellStyle(wb,sheet,cell,j,1000);
+                }
+                else if(outData[j].equals("抽检产品")){
+                    cell.setCellValue(staffBean.getProduceNanme());
+                    this.setDataCellStyle(wb,sheet,cell,j,3500);
+                }
+                else if(outData[j].equals("每个品类每个供应商样品抽样送检批次（次）")){
+
+                }
+                else if(outData[j].equals("每个品类每个供应商每批次抽检样品组数（组）")){
+
+                }
+                else if(outData[j].equals("供应商（标红供应商表示已达到该供应商集团计划抽检数量的1.5倍）")){
+                    cell.setCellValue(staffBean.getSupplierName());
+                }
+                else if(outData[j].equals("订单系统已下单应送样数量（组）")){
+
+                }
+                else if(outData[j].equals("已送样数量（组）")){
+
+                }
+                else if(outData[j].equals("已抽样数量（组）")){
+
+                }
+                else if(outData[j].equals("剩余未抽样数（组）")){
+
+                }
+                else if(outData[j].equals("按计划数1.5倍剩余未抽样数（组）")){
+
+                }
+                if(outData[j].equals("福州订单情况")){
+
+                }
+                else if(outData[j].equals("福州抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"福州",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("厦门订单情况") ){
+
+                }
+                else if(outData[j].equals("厦门抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"厦门",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("宁德订单情况")){
+
+                }
+                else if(outData[j].equals("宁德抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"宁德",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("莆田订单情况")){
+
+                }
+                else if(outData[j].equals("莆田抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"莆田",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("泉州订单情况")){
+
+                }
+                else if(outData[j].equals("泉州抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"泉州",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("漳州订单情况")){
+
+                }
+                else if(outData[j].equals("漳州抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"漳州",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("龙岩订单情况")){
+
+                }
+                else if(outData[j].equals("龙岩抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"龙岩",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("三明订单情况")){
+
+                }
+                else if(outData[j].equals("三明抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"三明",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+                else if(outData[j].equals("南平订单情况")){
+
+                }
+                else if(outData[j].equals("南平抽样情况")){
+                    this.setCityCell(staffBean.getItems(),"南平",cell);
+                    this.setDataCellStyle(wb,sheet,cell,j,900);
+                }
+
             }
         }
         return cell;
     }
 
-    private void setExcellStyle(HSSFWorkbook workbook,HSSFSheet sheet){
-        // 表头标题样式
-        HSSFFont headfont = workbook.createFont();
-        headfont.setFontName("宋体");
-        headfont.setFontHeightInPoints((short) 22);// 字体大小
-        HSSFCellStyle headstyle = workbook.createCellStyle();
-        headstyle.setFont(headfont);
-        headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
-        headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
-        headstyle.setLocked(true);
-        // 表头时间样式
-        HSSFFont datefont = workbook.createFont();
-        datefont.setFontName("宋体");
-        datefont.setFontHeightInPoints((short) 16);// 字体大小
-        HSSFCellStyle datestyle = workbook.createCellStyle();
-        datestyle.setFont(datefont);
-        datestyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
-        datestyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
-        datestyle.setLocked(true);
-        // 列名样式
-        HSSFFont font = workbook.createFont();
-        font.setFontName("宋体");
-        font.setFontHeightInPoints((short) 16);// 字体大小
-        HSSFCellStyle style = workbook.createCellStyle();
-        style.setBorderBottom(BorderStyle.THIN); //下边框
-        style.setBorderLeft(BorderStyle.THIN);//左边框
-        style.setBorderTop(BorderStyle.THIN);//上边框
-        style.setBorderRight(BorderStyle.THIN);//右边框
-        style.setFont(font);
-        style.setAlignment(HorizontalAlignment.CENTER);// 左右居中
-        style.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
-        style.setLocked(true);
-        // 普通单元格样式（中文）
-        HSSFFont font2 = workbook.createFont();
-        font2.setFontName("宋体");
-        font2.setFontHeightInPoints((short) 18);
-        HSSFCellStyle style2 = workbook.createCellStyle();
-        style2.setBorderBottom(BorderStyle.THIN); //下边框
-        style2.setBorderLeft(BorderStyle.THIN);//左边框
-        style2.setBorderTop(BorderStyle.THIN);//上边框
-        style2.setBorderRight(BorderStyle.THIN);//右边框
-        style2.setFont(font2);
-        style2.setAlignment(HorizontalAlignment.CENTER);// 左右居中
-        style2.setWrapText(true); // 换行
-        style2.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
-        // 设置列宽  （第几列，宽度）
-        sheet.setColumnWidth( 0, 1600);
-        sheet.setColumnWidth( 1, 3600);
-        sheet.setColumnWidth( 2, 2800);
-        sheet.setColumnWidth( 3, 2800);
-        sheet.setColumnWidth( 4, 2800);
-        sheet.setColumnWidth( 5, 2800);
-        sheet.setColumnWidth( 6, 4500);
-        sheet.setColumnWidth( 7, 3600);
-        sheet.setDefaultRowHeight((short)360);//设置行高
+    //合并单元格
+    private void mergerCell(HSSFSheet sheet,int startIdex,int endIndex){
+        CellRangeAddress region1 = new CellRangeAddress(startIdex,endIndex, 0, 0);
+        sheet.addMergedRegion(region1);
+        CellRangeAddress region2 = new CellRangeAddress(startIdex, endIndex, 1, 1);
+        sheet.addMergedRegion(region2);
+        CellRangeAddress region3 = new CellRangeAddress(startIdex, endIndex, 2, 2);
+        sheet.addMergedRegion(region3);
+    }
+
+    //设置地市抽样情况
+    private void setCityCell(List<CityAndCountiem> items,String cityName, HSSFCell cell){
+        for (CityAndCountiem item:items) {
+            if (item.getCityName().equals(cityName)){
+                cell.setCellValue(Integer.parseInt(item.getCount()));
+            }
+        }
+    }
+
+    //创建表头
+    private void setExcellStyle(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row,int column,String title,int width) {
+        HSSFCell cell = row.createCell((short)column);
+        cell.setCellValue(title);
+        sheet.addMergedRegion(new CellRangeAddress(1,3,column,column));
+        CellStyle cellStyle = wb.createCellStyle(); // 创建单元格样式
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);  // 设置单元格水平方向对其方式
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置单元格垂直方向对其方式
+        cellStyle.setWrapText(true);//自动换行
+        cell.setCellStyle(cellStyle); // 设置单元格样式
+        sheet.setColumnWidth(column,width);
+        sheet.setDefaultRowHeight((short)3000);//设置行高
+    }
+
+    //设置单元格样式
+    private void setDataCellStyle(HSSFWorkbook wb,HSSFSheet sheet, HSSFCell cell,int index, int width){
+        CellStyle cs = wb.createCellStyle(); // 创建单元格样式
+        cs.setAlignment(HorizontalAlignment.CENTER);  // 设置单元格水平方向对其方式
+        cs.setVerticalAlignment(VerticalAlignment.CENTER); // 设置单元格垂直方向对其方式
+        cs.setWrapText(true);
+        cell.setCellStyle(cs); // 设置单元格样式
+        sheet.setColumnWidth(index,width);
     }
 
     //创建文档摘要信息
@@ -315,8 +410,13 @@ public class excelTest {
         //合并行
         HSSFCell cell1 = row.createCell(6);
         cell1.setCellValue("合并行");
-        region = new CellRangeAddress(0, 5, 6, 6);
+        region = new CellRangeAddress(5, 6, 6, 6);
         sheet.addMergedRegion(region);
+        HSSFCell cell11 = row.createCell(6);
+        cell11.setCellValue("合并行");
+        region = new CellRangeAddress(5, 8, 6, 6);
+        sheet.addMergedRegion(region);
+
 
         //文档输出
         FileOutputStream out = new FileOutputStream("D:\\code\\exportExcel/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()).toString() + ".xls");
@@ -325,7 +425,7 @@ public class excelTest {
     }
 
     private List<StaffBean> getList()throws IOException{
-        String pathname = "D:\\code\\output\\part-r-00000.txt"; // 绝对路径或相对路径都可以，写入文件时演示相对路径,读取以上路径的input.txt文件
+        String pathname = "D:\\code\\HadoopLogs\\excelOutput/part-r-00000"; // 绝对路径或相对路径都可以，写入文件时演示相对路径,读取以上路径的input.txt文件
         //防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw;
         //不关闭文件会导致资源的泄露，读写文件都同理
         //Java7的try-with-resources可以优雅关闭文件，异常时自动关闭文件；详细解读https://stackoverflow.com/a/12665271

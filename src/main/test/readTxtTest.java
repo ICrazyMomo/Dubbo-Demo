@@ -22,7 +22,8 @@ public class readTxtTest {
 
     @Test
     public  void readFile() throws IOException {
-        String pathname = "/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput/part-r-00000"; // 绝对路径或相对路径都可以，写入文件时演示相对路径,读取以上路径的input.txt文件
+//        String pathname = "/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput/part-r-00000"; // 绝对路径或相对路径都可以，写入文件时演示相对路径,读取以上路径的input.txt文件
+        String pathname = "D:\\code\\HadoopLogs\\excelOutput/part-r-00000"; // 绝对路径或相对路径都可以，写入文件时演示相对路径,读取以上路径的input.txt文件
         //防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw;
         //不关闭文件会导致资源的泄露，读写文件都同理
         //Java7的try-with-resources可以优雅关闭文件，异常时自动关闭文件；详细解读https://stackoverflow.com/a/12665271
