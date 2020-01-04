@@ -3,6 +3,7 @@ package com.LinWengLiang.Service;
 import com.LinWengLiang.Model.DataItem;
 import com.LinWengLiang.Model.StaffBean;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -15,15 +16,12 @@ import java.util.Iterator;
  * @Description: reduce实现类
  * @date 2019/12/242:01 PM
  */
-public class HadoopReduce extends Reducer<Text, Text,Text,Text>{
+public class HadoopReduce extends Reducer<DataItem, NullWritable,DataItem,NullWritable>{
 
     @Override
-    protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-
-        int count = 0;
-        for (Text a :values){
-            count += Integer.parseInt(a.toString());
+    protected void reduce(DataItem key, Iterable<NullWritable> values, Context context) throws IOException, InterruptedException {
+        for (NullWritable v : values) {
+            context.write(key, v);
         }
-        context.write(key,new Text(String.valueOf(count)));
     }
 }

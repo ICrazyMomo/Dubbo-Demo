@@ -13,14 +13,14 @@ import java.io.IOException;
  * @Description: TODO
  * @date 2020/1/413:52
  */
-public class DataItem implements Writable {
+public class DataItem implements Writable, WritableComparable<DataItem> {
     private String produceName;
     private String supplierName;
     private String cityName;
     private String count;
-    private String index;
+    private int index;
 
-    public void set(String produceName, String supplierName, String cityName, String count,String index) {
+    public void set(String produceName, String supplierName, String cityName, String count,int index) {
         this.produceName = produceName;
         this.supplierName = supplierName;
         this.cityName = cityName;
@@ -28,7 +28,11 @@ public class DataItem implements Writable {
         this.index = index;
     }
 
-
+    public void setTwo(String produceName, String supplierName, int index) {
+        this.produceName = produceName;
+        this.supplierName = supplierName;
+        this.index = index;
+    }
 
     public String getProduceName() {
         return produceName;
@@ -62,11 +66,11 @@ public class DataItem implements Writable {
         this.count = count;
     }
 
-    public String getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(String index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
@@ -76,7 +80,7 @@ public class DataItem implements Writable {
         out.writeUTF(this.supplierName);
         out.writeUTF(this.cityName);
         out.writeUTF(this.count);
-        out.writeUTF(this.index);
+        out.writeInt(this.index);
     }
 
     @Override
@@ -85,12 +89,16 @@ public class DataItem implements Writable {
         this.supplierName = in.readUTF();
         this.cityName = in.readUTF();
         this.count = in.readUTF();
-        this.index = in.readUTF();
+        this.index = in.readInt();
     }
 
     @Override
     public String toString() {
-        return this.getCityName()+"/t"+this.getProduceName()+"/t"+this.getSupplierName()+"/t"+this.getCount();
+        return this.index+"\t"+ this.produceName+"\t"+this.supplierName+"\t"+this.cityName+"\t"+this.count;
     }
 
+    @Override
+    public int compareTo(DataItem o) {
+        return this.getIndex()-o.getIndex()==0?this.supplierName.compareTo(o.getSupplierName()):this.getIndex()-o.getIndex();
+    }
 }

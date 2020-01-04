@@ -1,9 +1,9 @@
+import com.LinWengLiang.Model.DataItem;
 import com.LinWengLiang.Model.StaffBean;
-import com.LinWengLiang.Service.HadoopMapper;
-import com.LinWengLiang.Service.HadoopReduce;
-import com.LinWengLiang.Service.JobSubmitter;
+import com.LinWengLiang.Service.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -23,17 +23,18 @@ public class mapReduceTest {
         job.setMapperClass(HadoopMapper.class);
         job.setReducerClass(HadoopReduce.class);
         // 3、封装参数：本次job的Mapper实现类、Reducer实现类产生的结果数据的key、value类型
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Text.class);
-
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+        job.setMapOutputKeyClass(DataItem.class);
+        job.setMapOutputValueClass(NullWritable.class);
+        job.setPartitionerClass(IndexPartitioner.class);
+        job.setGroupingComparatorClass(IndexGroupingComparator.class);
+        job.setOutputKeyClass(DataItem.class);
+        job.setOutputValueClass(NullWritable.class);
 
         // 4、封装参数：本次job要处理的输入数据集所在路径、最终结果的输出路径
-        FileInputFormat.setInputPaths(job, new Path("D:\\code\\input"));
-        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\output"));  // 注意：输出路径必须不存在
-//        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
-//        FileOutputFormat.setOutputPath(job,new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOuput"));  // 注意：输出路径必须不存在
+//        FileInputFormat.setInputPaths(job, new Path("D:\\code\\input"));
+//        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\output"));  // 注意：输出路径必须不存在
+        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
+        FileOutputFormat.setOutputPath(job,new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOuput"));  // 注意：输出路径必须不存在
 
         // 5、封装参数：想要启动的reduce task的数量
 //        job.setNumReduceTasks(1);

@@ -1,5 +1,6 @@
 package com.LinWengLiang.Service;
 
+import com.LinWengLiang.Model.DataItem;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -10,6 +11,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.io.DataInput;
 import java.io.IOException;
 
 /**
@@ -20,18 +22,21 @@ import java.io.IOException;
  */
 public class excelCount {
 
-    public static  class excelCountMap extends Mapper<LongWritable,Text,Text,Text>{
+    public static  class excelCountMap extends Mapper<LongWritable,Text,DataItem,Text>{
+        DataItem item = new DataItem();
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] fields = line.split("\t");
-            context.write(new Text(fields[0]+","+fields[1]+","),new Text(fields[2].substring(0,2)+fields[3]));
+//            item.set(fields[1],fields[2],fields[3].substring(0,2),fields[4],Integer.parseInt(fields[0]));
+            item.setTwo(fields[1],fields[3],Integer.parseInt(fields[0]));
+            context.write(item,new Text(fields[3].substring(0,2)+fields[4]));
         }
     }
 
-    public static class excelCountReduce extends Reducer<Text,Text,Text,Text>{
+    public static class excelCountReduce extends Reducer<DataItem,Text,DataItem,Text>{
         @Override
-        protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(DataItem key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             StringBuilder sb = new StringBuilder();
             for (Text value:values) {
                 if (values.iterator().hasNext()){
@@ -57,17 +62,18 @@ public class excelCount {
 
         job.setNumReduceTasks(1);
 
-        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputKeyClass(DataItem.class);
         job.setMapOutputValueClass(Text.class);
+        job.setPartitionerClass(IndexPartitioner.class);
+        job.setGroupingComparatorClass(IndexGroupingComparator.class);
 
-
-        job.setOutputKeyClass(Text.class);
+        job.setOutputKeyClass(DataItem.class);
         job.setOutputValueClass(Text.class);
 
-//        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
-//        FileOutputFormat.setOutputPath(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput"));
-        FileInputFormat.setInputPaths(job, new Path("D:\\code\\HadoopLogs\\excelInput"));
-        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\HadoopLogs\\excelOutput"));  // 注意：输出路径必须不存在
+        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
+        FileOutputFormat.setOutputPath(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput"));
+//        FileInputFormat.setInputPaths(job, new Path("D:\\code\\HadoopLogs\\excelInput"));
+//        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\HadoopLogs\\excelOutput"));  // 注意：输出路径必须不存在
 
         job.waitForCompletion(true);
     }
