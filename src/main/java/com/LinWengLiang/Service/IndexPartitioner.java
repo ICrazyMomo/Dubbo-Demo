@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.Partitioner;
 public class IndexPartitioner extends Partitioner<DataItem,NullWritable>{
     @Override
     public int getPartition(DataItem dataItem, NullWritable nullWritable, int i) {
-        return (dataItem.getIndex() & Integer.MAX_VALUE) % i;
+//        return ((dataItem.getIndex()+dataItem.getProduceName().hashCode()+dataItem.getSupplierName()+hashCode()) & Integer.MAX_VALUE) % i;
+        return ((dataItem.getProduceName().hashCode()+dataItem.getSupplierName().hashCode()+dataItem.getCityName().hashCode()) & Integer.MAX_VALUE)%i;
     }
 }

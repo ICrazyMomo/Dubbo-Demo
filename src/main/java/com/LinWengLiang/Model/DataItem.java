@@ -94,7 +94,8 @@ public class DataItem implements Writable, WritableComparable<DataItem> {
 
     @Override
     public String toString() {
-        return this.index+"\t"+ this.produceName+"\t"+this.supplierName+"\t"+this.cityName+"\t"+this.count;
+//        return this.index+"\t"+ this.produceName+"\t"+this.supplierName+"\t"+this.cityName+"\t"+this.count;
+        return this.index+"\t"+ this.produceName+"\t"+this.supplierName;
     }
 
     @Override

@@ -23,6 +23,6 @@ public class IndexGroupingComparator extends WritableComparator{
         DataItem o1 = (DataItem)a;
         DataItem o2 = (DataItem)b;
 
-        return o1.getIndex()-o2.getIndex();
+        return o1.getIndex()-o2.getIndex()==0?o1.getSupplierName().compareTo(o2.getSupplierName()):o1.getIndex()-o2.getIndex();
     }
 }

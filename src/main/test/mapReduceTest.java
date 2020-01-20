@@ -31,10 +31,10 @@ public class mapReduceTest {
         job.setOutputValueClass(NullWritable.class);
 
         // 4、封装参数：本次job要处理的输入数据集所在路径、最终结果的输出路径
-//        FileInputFormat.setInputPaths(job, new Path("D:\\code\\input"));
-//        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\output"));  // 注意：输出路径必须不存在
-        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
-        FileOutputFormat.setOutputPath(job,new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOuput"));  // 注意：输出路径必须不存在
+        FileInputFormat.setInputPaths(job, new Path("D:\\code\\input"));
+        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\output"));  // 注意：输出路径必须不存在
+//        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
+//        FileOutputFormat.setOutputPath(job,new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOuput"));  // 注意：输出路径必须不存在
 
         // 5、封装参数：想要启动的reduce task的数量
 //        job.setNumReduceTasks(1);

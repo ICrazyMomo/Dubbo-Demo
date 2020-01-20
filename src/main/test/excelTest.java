@@ -1,6 +1,7 @@
 import com.LinWengLiang.Model.CityAndCountiem;
 import com.LinWengLiang.Model.StaffBean;
 import com.LinWengLiang.Service.ReadTxtService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hssf.usermodel.*;
@@ -143,18 +144,24 @@ public class excelTest {
             row = sheet.createRow(i + 4);
             if (i==0){//第一条数据，就是第5行开始
                 tmpProduceName = staffBean.getProduceNanme();
-            }else if (i>0){//第二条数据开始之后
-                if (!tmpProduceName.equals(staffBean.getProduceNanme())){//判断新的一行的产品名称跟上一行是否相等(存在有不相同的行)
+                //第二条数据开始之后
+            }else if (i>0 & StringUtils.isNotBlank(staffBean.getProduceNanme())){
+                //判断新的一行的产品名称跟上一行是否相等(存在有不相同的行)
+//                startIndex=endIndex+1;
+                if (!tmpProduceName.equals(staffBean.getProduceNanme())){
                     tmpProduceName = staffBean.getProduceNanme();
                     num += 1;
                     if (startIndex!=endIndex){
                         this.mergerCell(sheet,startIndex,endIndex);
                     }
                     startIndex=endIndex+1;
-                }else{//如果全是相同的行(判断最后一行和第一行是否相同，如果相同就全部合并)
+                }
+                //如果全是相同的行(判断最后一行和第一行是否相同，如果相同就全部合并)
+                else{
                     if (i==staffBeans.size()-1){
-                        if (tmpProduceName.equals(staffBean.getProduceNanme())){
-                            this.mergerCell(sheet,startIndex,i+startIndex);
+//                        startIndex=endIndex+1;
+                        if (tmpProduceName.equals(staffBean.getProduceNanme()) &  StringUtils.isNotBlank(tmpProduceName)){
+                            this.mergerCell(sheet,startIndex,endIndex);
                         }
                     }
                 }
@@ -437,11 +444,16 @@ public class excelTest {
         //网友推荐更加简洁的写法
         while ((line = br.readLine()) != null) {
             // 一次读入一行数据
-            String[] strs = line.split(",");
-            String[]citys = strs[2].substring(1).split("\t");
+            String[] strs = line.split("\t");
+            List<String>citys = new ArrayList<String>();
+            for (int i =0;i<strs.length;i++){
+                if (i>2){
+                    citys.add(strs[i]);
+                }
+            }
             StaffBean staffBean = new StaffBean();
-            staffBean.setProduceNanme(strs[0]);
-            staffBean.setSupplierName(strs[1]);
+            staffBean.setProduceNanme(strs[1]);
+            staffBean.setSupplierName(strs[2]);
             ArrayList<CityAndCountiem> countiems = new ArrayList<CityAndCountiem>();
             for (String str :citys){
                 CityAndCountiem cityAndCountiem = new CityAndCountiem();

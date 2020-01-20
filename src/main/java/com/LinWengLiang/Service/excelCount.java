@@ -28,8 +28,8 @@ public class excelCount {
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             String[] fields = line.split("\t");
-//            item.set(fields[1],fields[2],fields[3].substring(0,2),fields[4],Integer.parseInt(fields[0]));
-            item.setTwo(fields[1],fields[3],Integer.parseInt(fields[0]));
+            item.set(fields[1],fields[2],fields[3].substring(0,2),fields[4],Integer.parseInt(fields[0]));
+//            item.setTwo(fields[1],fields[3],Integer.parseInt(fields[0]));
             context.write(item,new Text(fields[3].substring(0,2)+fields[4]));
         }
     }
@@ -70,10 +70,10 @@ public class excelCount {
         job.setOutputKeyClass(DataItem.class);
         job.setOutputValueClass(Text.class);
 
-        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
-        FileOutputFormat.setOutputPath(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput"));
-//        FileInputFormat.setInputPaths(job, new Path("D:\\code\\HadoopLogs\\excelInput"));
-//        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\HadoopLogs\\excelOutput"));  // 注意：输出路径必须不存在
+//        FileInputFormat.setInputPaths(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelInput"));
+//        FileOutputFormat.setOutputPath(job, new Path("/Users/linwengjing/Downloads/Java/HadoopLogs/excelOutput"));
+        FileInputFormat.setInputPaths(job, new Path("D:\\code\\HadoopLogs\\excelInput"));
+        FileOutputFormat.setOutputPath(job,new Path("D:\\code\\HadoopLogs\\excelOutput"));  // 注意：输出路径必须不存在
 
         job.waitForCompletion(true);
     }
