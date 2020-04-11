@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--xml 和 注解共用部分-->
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="dubbo-consumer" />
+    <!-- 使用multicast广播注册中心暴露发现服务地址 -->
+    <dubbo:registry  protocol="zookeeper"  address="127.0.0.1:2181" />
+    <!--xml 和 注解共用部分-->
+
+    <!--xml方式-->
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService   通过配置实现-->
+   <!--<dubbo:reference id="demoService" interface="com.tools.service.DemoService" />-->
+
+    <!--注解方式-->
+    <!-- 扫描所有注册bean的java类，发现带”@Reference”标签的属性，
+        它会去寻找发布的provider是否有匹配的接口，有就自动注入。 -->
+    <dubbo:annotation package="com.tools.controller"></dubbo:annotation>
+
+
+</beans>
